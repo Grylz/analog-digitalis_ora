@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Órai óra feladat</title>
+    <style>
+       
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-image: url(https://wallpapercave.com/wp/wp2864012.gif);
+            text-align: center;
+            margin-top: 3%;
+            margin-left: 1.5%;
+            background-repeat: no-repeat;
+        }
+
+        #orarendszer {
+            position: relative;
+        }
+
+        #ora {
+            width: 200px;
+            height: 200px;
+            border: 6px solid wheat;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        #oraoraja, #perc, #masodperc {
+            position: absolute;
+            width: 50%;
+            height: 1px;
+            background: white;
+            top: 50%;
+            transform-origin: 100% 50%;
+            transform: rotate(90deg);
+        }
+
+        #oraoraja {
+            height: 5px;
+            margin-right: 42%;
+            top: 47%;
+        }
+
+        #perc {
+            height: 4px;
+            margin-right: 44%;
+        }
+
+        #masodperc {
+            height: 2px;
+            background: crimson;
+            margin-right: 45%;
+        }
+
+        #digitalisOra {
+            color: white;
+            display: none;
+            font-size: 50px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="orarendszer" onclick="valtOra()">
+        <div id="ora">
+            <div id="oraoraja"></div>
+            <div id="perc"></div>
+            <div id="masodperc"></div>
+        </div>
+        <div id="digitalisOra"></div>
+    </div>
+
+    <script>
+        let Analóg = true;
+
+        function valtOra() {
+            Analóg = !Analóg;
+            frissitOra();
+        }
+
+        function frissitOra() {
+            const most = new Date();
+
+            if (Analóg) {
+                const orak = most.getHours();
+                const percek = most.getMinutes();
+                const masodpercek = most.getSeconds();
+                const oraSzog = (orak % 12 + percek / 60) * 30;
+                const percSzog = (percek + masodpercek / 60) * 6;
+                const masodpercSzog = masodpercek * 6;
+
+                document.getElementById('oraoraja').style.transform = `rotate(${oraSzog}deg) translateY(-50%)`;
+                document.getElementById('perc').style.transform = `rotate(${percSzog}deg) translateY(-50%)`;
+                document.getElementById('masodperc').style.transform = `rotate(${masodpercSzog}deg) translateY(-50%)`;
+                document.getElementById('ora').style.display = 'flex';
+                document.getElementById('digitalisOra').style.display = 'none';
+            } else {
+                const orak = most.getHours().toString().padStart(2, '0');
+                const percek = most.getMinutes().toString().padStart(2, '0');
+                const masodpercek = most.getSeconds().toString().padStart(2, '0');
+                const idoString = `${orak}:${percek}:${masodpercek}`;
+                document.getElementById('digitalisOra').innerText = idoString;
+                document.getElementById('ora').style.display = 'none';
+                document.getElementById('digitalisOra').style.display = 'block';
+            }
+        }
+        setInterval(frissitOra, 1000);
+        frissitOra();
+    </script>
+</body>
+</html>
